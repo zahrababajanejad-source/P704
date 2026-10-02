@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌾 فروشگاه برنج زرگر</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  :root {
+    --green: #7cb342;
+    --green-dark: #558b2f;
+    --green-light: #e8f5e9;
+    --bg: #f5f7f3;
+    --card: #ffffff;
+    --text: #2c3e2e;
+    --text-light: #7a8a7c;
+    --border: #e5eae0;
+    --shadow: 0 4px 20px rgba(60, 100, 50, 0.08);
+  }
+  body.dark {
+    --bg: #1a1f1a;
+    --card: #232a23;
+    --text: #e8f0e6;
+    --text-light: #8fa08e;
+    --border: #2f3a2f;
+    --green-light: #2a3a2a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Vazirmatn', Tahoma, sans-serif;
+    background: var(--bg); color: var(--text);
+    transition: background 0.3s, color 0.3s;
+    line-height: 1.7;
+  }
+
+  /* هدر */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+  }
+  .topbar-inner {
+    max-width: 1200px; margin: 0 auto;
+    padding: 12px 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 8px;
+    font-weight: 800; font-size: 18px;
+    color: var(--green-dark); white-space: nowrap;
+  }
+  .logo-icon { font-size: 26px; }
+
+  .search-box { flex: 1; position: relative; max-width: 500px; }
+  .search-box input {
+    width: 100%; padding: 11px 42px 11px 16px;
+    border: 1px solid var(--border); border-radius: 12px;
+    background: var(--bg); color: var(--text);
+    font-family: inherit; font-size: 14px;
+    outline: none; transition: border 0.2s;
+  }
+  .search-box input:focus { border-color: var(--green); }
+  .search-box::before {
+    content: "🔍"; position: absolute;
+    right: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 15px; opacity: 0.6;
+  }
+
+  .icon-btn {
+    background: var(--bg); border: 1px solid var(--border);
+    width: 42px; height: 42px; border-radius: 12px;
+    cursor: pointer; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; transition: all 0.2s;
+    color: var(--text);
+  }
+  .icon-btn:hover { background: var(--green-light); }
+  .icon-btn .badge {
+    position: absolute; top: -4px; left: -4px;
+    background: #e53935; color: #fff;
+    font-size: 11px; font-weight: bold;
+    min-width: 20px; height: 20px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 4px; transform: scale(0); transition: transform 0.2s;
+  }
+  .icon-btn .badge.show { transform: scale(1); }
+
+  .app { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+  /* هیرو */
+  .hero {
+    background: linear-gradient(135deg, #7cb342, #558b2f);
+    border-radius: 24px; padding: 40px 30px;
+    color: #fff; margin-bottom: 30px;
+    position: relative; overflow: hidden; text-align: center;
+  }
+  .hero::before {
+    content: "🌾"; position: absolute;
+    left: -20px; bottom: -40px;
+    font-size: 200px; opacity: 0.1;
+  }
+  .hero h1 { font-size: 32px; font-weight: 800; margin-bottom: 10px; }
+  .hero p { font-size: 16px; opacity: 0.95; margin-bottom: 20px; }
+  .hero-stats {
+    display: flex; justify-content: center;
+    gap: 30px; flex-wrap: wrap; margin-top: 25px;
+  }
+  .stat-item { text-align: center; }
+  .stat-item .num { font-size: 26px; font-weight: 800; display: block; }
+  .stat-item .lbl { font-size: 13px; opacity: 0.9; }
+
+  /* دسته‌بندی */
+  .categories {
+    display: flex; gap: 10px; overflow-x: auto;
+    padding: 5px 2px 15px; scrollbar-width: none;
+  }
+  .categories::-webkit-scrollbar { display: none; }
+  .cat-btn {
+    padding: 10px 20px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 30px; cursor: pointer;
+    font-family: inherit; font-size: 14px;
+    color: var(--text); white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .cat-btn:hover { border-color: var(--green); }
+  .cat-btn.active {
+    background: var(--green); color: #fff;
+    border-color: var(--green);
+  }
+
+  /* گرید محصولات */
+  .products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+  }
+  .card {
+    background: var(--card); border-radius: 18px;
+    overflow: hidden; box-shadow: var(--shadow);
+    display: flex; flex-direction: column;
+    transition: transform 0.25s, box-shadow 0.25s;
+    cursor: pointer; position: relative;
+    animation: fadeIn 0.4s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(60, 100, 50, 0.15);
+  }
+  .card-img {
+    height: 180px; background: var(--green-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 60px; overflow: hidden; position: relative;
+  }
+  .card-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.4s;
+  }
+  .card:hover .card-img img { transform: scale(1.08); }
+  .card-badge {
+    position: absolute; top: 10px; right: 10px;
+    background: #fff; color: var(--green-dark);
+    font-size: 11px; font-weight: bold;
+    padding: 4px 10px; border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .card-body { padding: 14px; flex: 1; display: flex; flex-direction: column; }
+  .card-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; gap: 8px; margin-bottom: 6px;
+  }
+  .card-body h3 { font-size: 16px; color: var(--text); font-weight: 700; }
+  .rating {
+    display: flex; align-items: center; gap: 3px;
+    font-size: 12px; color: #ffa000; white-space: nowrap;
+  }
+  .card-desc {
+    font-size: 12.5px; color: var(--text-light);
+    margin-bottom: 10px; line-height: 1.6;
+    display: -webkit-box; -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .price-row {
+    display: flex; align-items: center;
+    justify-content: space-between;
+    margin-top: auto; padding-top: 10px;
+    border-top: 1px dashed var(--border);
+  }
+  .price { color: var(--green-dark); font-size: 16px; font-weight: 800; }
+  .price small { font-size: 11px; font-weight: normal; opacity: 0.7; }
+  .add-btn {
+    background: var(--green); color: #fff;
+    border: none; width: 36px; height: 36px;
+    border-radius: 10px; cursor: pointer;
+    font-size: 18px;
+    transition: background 0.2s, transform 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .add-btn:hover { background: var(--green-dark); }
+  .add-btn:active { transform: scale(0.9); }
+
+  /* تماس */
+  .contact-section {
+    margin-top: 40px;
+    background: var(--card); border-radius: 20px;
+    padding: 30px; box-shadow: var(--shadow);
+  }
+  .contact-section h3 {
+    font-size: 20px; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 15px;
+  }
+  .contact-card {
+    padding: 18px; background: var(--bg);
+    border-radius: 14px; text-decoration: none;
+    color: var(--text);
+    display: flex; align-items: center; gap: 12px;
+    transition: transform 0.2s;
+    border: 1px solid var(--border);
+  }
+  .contact-card:hover { transform: translateY(-3px); }
+  .contact-card .cc-icon { font-size: 26px; }
+  .contact-card .cc-text strong {
+    display: block; font-size: 14px; color: var(--text);
+  }
+  .contact-card .cc-text span {
+    font-size: 13px; color: var(--text-light);
+  }
+  .address-box {
+    margin-top: 15px;
+    background: linear-gradient(135deg, #fff8e1, #fff3c4);
+    border: 1px solid #f0e0a0;
+    border-radius: 14px; padding: 18px;
+    color: #5a4a1a; font-size: 14px; line-height: 1.9;
+  }
+  .address-box strong {
+    color: #7a5f00; display: block;
+    margin-bottom: 6px; font-size: 15px;
+  }
+
+  footer {
+    text-align: center; padding: 30px 20px;
+    color: var(--text-light); font-size: 13px;
+    margin-top: 30px;
+  }
+
+  /* مودال */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center;
+    z-index: 200; padding: 20px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--card); border-radius: 22px;
+    max-width: 500px; width: 100%;
+    max-height: 90vh; overflow-y: auto;
+    animation: slideUp 0.3s ease; position: relative;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .modal-img {
+    height: 260px; background: var(--green-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 90px; border-radius: 22px 22px 0 0;
+    overflow: hidden;
+  }
+  .modal-img img { width: 100%; height: 100%; object-fit: cover; }
+  .modal-body { padding: 22px; }
+  .modal-body h2 { font-size: 22px; margin-bottom: 8px; }
+  .modal-body .modal-rating { color: #ffa000; margin-bottom: 12px; font-size: 14px; }
+  .modal-body .modal-desc {
+    color: var(--text-light); font-size: 14px;
+    line-height: 1.9; margin-bottom: 18px;
+  }
+  .modal-body .modal-price {
+    font-size: 22px; font-weight: 800;
+    color: var(--green-dark); margin-bottom: 18px;
+  }
+  .modal-actions { display: flex; gap: 10px; }
+  .modal-actions button {
+    flex: 1; padding: 14px; border-radius: 12px;
+    border: none; font-family: inherit;
+    font-size: 15px; font-weight: bold; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary { background: var(--green); color: #fff; }
+  .btn-primary:hover { background: var(--green-dark); }
+  .btn-outline {
+    background: var(--bg); color: var(--text);
+    border: 1px solid var(--border) !important;
+  }
+  .btn-outline:hover { background: var(--green-light); }
+  .close-modal {
+    po
